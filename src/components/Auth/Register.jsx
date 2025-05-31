@@ -27,7 +27,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://collegebackend.vercel.app/api/v1/user/register",
+        "https://newcollegebackend.vercel.app/api/user/register",
         { name, phone, email, role, password },
         {
           headers: { "Content-Type": "application/json" },
