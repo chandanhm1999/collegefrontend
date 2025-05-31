@@ -19,7 +19,7 @@ const MyApplications = () => {
       if (user && user.role === "Employer") {
         axios
           .get(
-            "https://collegebackend.vercel.app/api/v1/application/employer/getall",
+            "https://newcollegebackend.vercel.app/api/application/employer/getall",
             {
               withCredentials: true,
             }
