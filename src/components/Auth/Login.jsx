@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://collegebackend.vercel.app/api/user/login",
+        "https://newcollegebackend.vercel.app/api/user/login",
         { email, password, role },
         {
           headers: { "Content-Type": "application/json" },
