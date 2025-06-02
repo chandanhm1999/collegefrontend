@@ -64,7 +64,7 @@ const JobDetails = () => {
             )}
           </p>
           {user && user.role === "Job Seeker" && (
-            <Link to={`/application/${job._id}`}>Apply Now</Link>
+            <Link to={`/apply/${job._id}`}>Apply Now</Link>
           )}
         </div>
       </div>
