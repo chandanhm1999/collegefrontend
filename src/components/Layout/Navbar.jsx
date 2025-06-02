@@ -10,6 +10,8 @@ const Navbar = () => {
   const { isAuthorized, setIsAuthorized, user } = useContext(Context);
   const navigateTo = useNavigate();
 
+  // "backend"
+
   const handleLogout = async () => {
     try {
       const response = await axios.get(

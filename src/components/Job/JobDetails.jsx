@@ -12,7 +12,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`https://collegebackend.vercel.app/api/v1/job/${id}`, {
+      .get(`https://newcollegebackend.vercel.app/api/job/${id}`, {
         withCredentials: true,
       })
       .then((res) => {

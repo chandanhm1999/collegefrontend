@@ -30,7 +30,7 @@ const MyApplications = () => {
       } else {
         axios
           .get(
-            "https://collegebackend.vercel.app/api/v1/application/jobseeker/getall",
+            "https://newcollegebackend.vercel.app/api/application/jobseeker/getall",
             {
               withCredentials: true,
             }
@@ -52,7 +52,7 @@ const MyApplications = () => {
     try {
       axios
         .delete(
-          `https://collegebackend.vercel.app/api/v1/application/delete/${id}`,
+          `https://newcollegebackend.vercel.app/api/application/delete/${id}`,
           {
             withCredentials: true,
           }
