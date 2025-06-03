@@ -17,7 +17,6 @@ const MyApplications = () => {
 
     const fetchApplications = async () => {
       try {
-        // Employer or Recruiter sees all applications for their posted jobs
         const isEmployerOrRecruiter =
           user && (user.role === "Employer" || user.role === "Recruiter");
 
@@ -25,7 +24,10 @@ const MyApplications = () => {
           ? "https://newcollegebackend.vercel.app/api/application/employer/getall"
           : "https://newcollegebackend.vercel.app/api/application/jobseeker/getall";
 
+        console.log("Calling endpoint:", endpoint);
+
         const res = await axios.get(endpoint, { withCredentials: true });
+        console.log("Fetched Applications:", res.data.applications);
         setApplications(res.data.applications);
       } catch (error) {
         toast.error(
