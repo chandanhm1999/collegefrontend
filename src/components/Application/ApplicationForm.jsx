@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../../main";
+import "./ApplicationForm.css";
 
 const ApplicationForm = () => {
-  const { id } = useParams(); // jobId from URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(Context);
 
@@ -14,42 +15,29 @@ const ApplicationForm = () => {
     phone: "",
     address: "",
     coverLetter: "",
-    resume: null,
   });
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "resume") {
-      setFormData({ ...formData, resume: files[0] });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.resume) return alert("Please attach a resume!");
-
-    const data = new FormData();
-    data.append("jobId", id);
-    data.append("name", formData.name);
-    data.append("email", formData.email);
-    data.append("phone", formData.phone);
-    data.append("address", formData.address);
-    data.append("coverLetter", formData.coverLetter);
-    data.append("resume", formData.resume);
 
     try {
       const res = await axios.post(
         "https://newcollegebackend.vercel.app/api/application/submit",
-        data,
+        {
+          jobId: id,
+          ...formData,
+        },
         {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
         }
       );
       alert(res.data.message);
-      navigate("/applications"); // redirect after success
+      navigate("/applications");
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");
     }
@@ -57,9 +45,9 @@ const ApplicationForm = () => {
 
   return (
     <section className="applicationForm page">
-      <div className="container">
+      <div className="form-container">
         <h3>Application Form</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form">
           <input
             type="text"
             name="name"
@@ -100,13 +88,6 @@ const ApplicationForm = () => {
             onChange={handleChange}
             placeholder="Cover Letter..."
           ></textarea>
-          <input
-            type="file"
-            name="resume"
-            accept=".pdf,.doc,.docx"
-            onChange={handleChange}
-            required
-          />
           <button type="submit">Send Application</button>
         </form>
       </div>
