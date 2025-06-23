@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 const MyApplications = () => {
   const { user, isAuthorized } = useContext(Context);
   const [applications, setApplications] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [currentEdit, setCurrentEdit] = useState(null);
+
   const navigateTo = useNavigate();
 
   useEffect(() => {
@@ -24,10 +27,7 @@ const MyApplications = () => {
           ? "https://newcollegebackend.vercel.app/api/application/employer/getall"
           : "https://newcollegebackend.vercel.app/api/application/jobseeker/getall";
 
-        console.log("Calling endpoint:", endpoint);
-
         const res = await axios.get(endpoint, { withCredentials: true });
-        console.log("Fetched Applications:", res.data.applications);
         setApplications(res.data.applications);
       } catch (error) {
         toast.error(
@@ -54,6 +54,37 @@ const MyApplications = () => {
     }
   };
 
+  const startEditing = (app) => {
+    setCurrentEdit(app);
+    setEditMode(true);
+  };
+
+  const handleEditChange = (e) => {
+    setCurrentEdit({ ...currentEdit, [e.target.name]: e.target.value });
+  };
+
+  const saveEdits = async () => {
+    try {
+      const res = await axios.put(
+        `https://newcollegebackend.vercel.app/api/application/edit/${currentEdit._id}`,
+        currentEdit,
+        { withCredentials: true }
+      );
+      toast.success(res.data.message);
+      setApplications((prev) =>
+        prev.map((app) =>
+          app._id === currentEdit._id ? res.data.application : app
+        )
+      );
+      setEditMode(false);
+      setCurrentEdit(null);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to update application"
+      );
+    }
+  };
+
   const renderCard = (element) => {
     return (
       <div className="job_seeker_card" key={element._id}>
@@ -71,14 +102,22 @@ const MyApplications = () => {
             <span>Address:</span> {element.address}
           </p>
           <p>
-            <span>CoverLetter:</span> {element.coverLetter}
+            <span>Cover Letter:</span> {element.coverLetter}
           </p>
         </div>
-        {/* Only Job Seekers can delete their own applications */}
         {user.role === "Job Seeker" && (
           <div className="btn_area">
-            <button onClick={() => deleteApplication(element._id)}>
-              Delete Application
+            <button
+              className="editoption"
+              onClick={() => deleteApplication(element._id)}
+            >
+              Delete
+            </button>
+            <button
+              className="editoptionupdate"
+              onClick={() => startEditing(element)}
+            >
+              Update
             </button>
           </div>
         )}
@@ -94,10 +133,59 @@ const MyApplications = () => {
             ? "My Applications"
             : "Applications From Job Seekers"}
         </h1>
+
         {applications.length === 0 ? (
           <h4>No Applications Found</h4>
         ) : (
           applications.map(renderCard)
+        )}
+
+        {/* Edit Modal */}
+        {editMode && currentEdit && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Edit Application</h2>
+              <input
+                type="text"
+                name="name"
+                value={currentEdit.name}
+                onChange={handleEditChange}
+                placeholder="Name"
+              />
+              <input
+                type="email"
+                name="email"
+                value={currentEdit.email}
+                onChange={handleEditChange}
+                placeholder="Email"
+              />
+              <input
+                type="text"
+                name="phone"
+                value={currentEdit.phone}
+                onChange={handleEditChange}
+                placeholder="Phone"
+              />
+              <input
+                type="text"
+                name="address"
+                value={currentEdit.address}
+                onChange={handleEditChange}
+                placeholder="Address"
+              />
+              <textarea
+                name="coverLetter"
+                value={currentEdit.coverLetter}
+                onChange={handleEditChange}
+                placeholder="Cover Letter"
+              ></textarea>
+
+              <div className="btn_area">
+                <button onClick={saveEdits}>Save</button>
+                <button onClick={() => setEditMode(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </section>
