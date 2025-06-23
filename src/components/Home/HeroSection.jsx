@@ -33,10 +33,13 @@ const HeroSection = () => {
       <div className="heroSection">
         <div className="container">
           <div className="title">
-            <h2>Welcome To College Placement Management System</h2>
+            <h2>Welcome To Placement Management System</h2>
             <h3>A Way To Your Destiny</h3>
             <p>
-            Placement Management System manages student information in the college with regard to placement. It improves existing system .It has the facility of maintaining the details of the student, thereby reducing the manual work. 
+              Placement Management System manages student information in the
+              college with regard to placement. It improves existing system .It
+              has the facility of maintaining the details of the student,
+              thereby reducing the manual work.
             </p>
           </div>
           <div className="image">
